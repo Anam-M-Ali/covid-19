@@ -1,4 +1,4 @@
-name: Debug SSH to EC2
+name: Deploy Static Website to EC2
 
 on:
   push:
@@ -13,12 +13,12 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Start SSH agent and add key
-      uses: webfactory/ssh-agent@v0.7.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Test SSH connection
+    - name: Decode SSH private key
       run: |
-        echo "Trying to SSH into EC2..."
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Connected!"'
+        echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > key.pem
+        chmod 600 key.pem
+
+    - name: Test SSH Connection
+      run: |
+        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'CONNECTED!'"
+
