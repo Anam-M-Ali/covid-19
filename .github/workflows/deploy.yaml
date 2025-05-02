@@ -17,8 +17,11 @@ jobs:
       run: |
         echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > key.pem
         chmod 600 key.pem
+        echo "Key decoded successfully"
 
-    - name: Test SSH Connection
+    - name: Debug SSH connection
       run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'CONNECTED!'"
+        echo "Connecting to EC2..."
+        ssh -vvv -i key.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo CONNECTED"
+
 
