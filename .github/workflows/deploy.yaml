@@ -18,7 +18,11 @@ jobs:
         echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > key.pem
         chmod 600 key.pem
 
-    - name: Test SSH Connection
+    - name: Deploy Website to EC2
       run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'CONNECTED!'"
-
+        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          sudo rm -rf /var/www/html
+          sudo mkdir -p /var/www/html
+          sudo chown -R ubuntu:ubuntu /var/www/html
+          git clone https://github.com/Anam-M-Ali/covid-19.git /var/www/html
+        EOF
