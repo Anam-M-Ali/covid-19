@@ -21,7 +21,6 @@ jobs:
     - name: Deploy Website to EC2
       run: |
         ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd /var/www/html
-          sudo rm -rf *
-          git clone https://github.com/Anam-M-Ali/covid-19.git .
+          sudo rm -rf /var/www/html/*
+          git clone https://github.com/Anam-M-Ali/covid-19.git /var/www/html
         EOF
