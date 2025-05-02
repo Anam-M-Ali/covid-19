@@ -1,9 +1,9 @@
-name: Deploy to Remote Server
+name: Deploy Static Website to EC2
 
 on:
   push:
     branches:
-      - main  # or your deployment branch
+      - main
 
 jobs:
   deploy:
@@ -23,5 +23,5 @@ jobs:
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           cd /var/www/html
           sudo rm -rf *
-          git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git .
+          git clone https://github.com/Anam-M-Ali/covid-19.git .
         EOF
